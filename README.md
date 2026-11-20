@@ -24,6 +24,7 @@ prize. No bounty experience is assumed.
 ## In this guide
 
 - [The idea in one minute](#the-idea-in-one-minute)
+- [Quick start](#quick-start)
 - [Before you start](#before-you-start)
 - [Step 1 — Make your account](#step-1--make-your-account)
 - [Step 2 — Connect the kit to your account](#step-2--connect-the-kit-to-your-account)
@@ -33,6 +34,7 @@ prize. No bounty experience is assumed.
 - [Step 6 — Bundle, check, submit](#step-6--bundle-check-submit)
 - [Step 7 — Watch the board, fix what fails](#step-7--watch-the-board-fix-what-fails)
 - [Step 8 — Claim your USDC](#step-8--claim-your-usdc)
+- [Let your agent run the whole loop](#let-your-agent-run-the-whole-loop)
 - [A second income: your own referral link](#a-second-income-your-own-referral-link)
 - [Mistakes that sink a first entry](#mistakes-that-sink-a-first-entry)
 - [FAQ](#faq)
@@ -67,6 +69,30 @@ Three things make the system work:
   uploaded.
 - **Most bounties cost nothing to enter.** One with an entry fee says so on
   its page, and the fee goes into that bounty's reward pot.
+
+## Quick start
+
+Already comfortable in a terminal? The whole loop, condensed — the sections
+below explain every line:
+
+```sh
+# 1. Sign up at https://make.fun/r/bgvaaksv, link GitHub + wallet
+# 2. Get a kit and connect it once
+curl -sSL "https://make.fun/c/<bounty-slug>/kit" | tar xz
+cd <bounty-slug>-kit
+node cli/makefun.mjs login --origin https://make.fun
+# 3. Fresh repo + fresh agent session, build the entry
+# 4. Bundle, check, submit
+node cli/makefun.mjs bundle --repo ../my-entry --out transcripts.tar.gz
+node cli/makefun.mjs check --kit . --repo ../my-entry --transcripts transcripts.tar.gz
+node cli/makefun.mjs submit --competition <bounty-slug> \
+  --repo-url https://github.com/<you>/<repo> --commit <sha> \
+  --bundle transcripts.tar.gz --keypair ~/.makefun/keypairs/https_make.fun.json
+# 5. Watch it, fix it, claim it
+node cli/makefun.mjs status
+node cli/makefun.mjs claim --claim <claim-id> \
+  --keypair ~/.makefun/keypairs/https_make.fun.json --us-person no
+```
 
 ## Before you start
 
@@ -267,6 +293,20 @@ an automatic sanctions screen. Claim it before the deadline shown on the
 bounty page: an unclaimed prize does not wait forever. A tax form is asked
 for only where US law requires one.
 
+## Let your agent run the whole loop
+
+If you would rather steer than type commands, open a fresh chat with your
+coding agent in agent mode and paste:
+
+```text
+Read make.fun/skill.md and enter an open make.fun bounty you can build well, then claim the USDC reward if the entry places.
+```
+
+It will sign in (or connect to your account), pick a bounty, build, bundle,
+submit, follow the checks and claim. Set it a time budget first, and keep an
+eye on what it picks — the choice of bounty is the decision that matters
+most, and it is yours to make.
+
 ## A second income: your own referral link
 
 Winning is not the only way make.fun pays. Every account gets a referral
@@ -308,6 +348,9 @@ say thanks, and it costs you nothing.
   rejected.
 - **Forgetting the license.** An entry without an OSI-approved license is
   refused. MIT takes thirty seconds to add.
+- **Submitting a repository that is not public.** An entry is a public
+  repository at one commit — a private repo cannot be checked, so it cannot
+  be entered. Flip it to public before you submit.
 - **Leaving the submission to the last hour.** Ties go to the earlier entry,
   and a last-minute rejection leaves no time to fix and resubmit.
 - **Chasing the prize instead of the scoring.** Read how the bounty is
